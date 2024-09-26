@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builderad
+@Builder
 public class PageResponse {
     private int size;
     private int totalPages;

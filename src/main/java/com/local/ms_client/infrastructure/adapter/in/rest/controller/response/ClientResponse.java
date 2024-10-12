@@ -1,13 +1,13 @@
 package com.local.ms_client.infrastructure.adapter.in.rest.controller.response;
 
 import com.local.ms_client.domain.enums.StateEnum;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ClientResponse {
 
     private Long id;

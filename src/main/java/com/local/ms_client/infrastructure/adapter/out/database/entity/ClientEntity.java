@@ -2,10 +2,7 @@ package com.local.ms_client.infrastructure.adapter.out.database.entity;
 
 
 import com.local.ms_client.domain.enums.StateEnum;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -28,7 +25,8 @@ public class ClientEntity {
     private String email;
     private String phone;
     private String address;
-    @Column(name = "storeId")
+    @Column(name = "store_id")
     private Long storeId;
+    @Enumerated(EnumType.STRING)
     private StateEnum status;
 }

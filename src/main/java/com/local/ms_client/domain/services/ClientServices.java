@@ -6,11 +6,12 @@ import com.local.ms_client.application.port.in.SaveClientUseCase;
 import com.local.ms_client.application.port.out.ClientOutputPort;
 import com.local.ms_client.domain.model.Client;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -40,6 +41,7 @@ public class ClientServices implements FindClientUseCase, SaveClientUseCase {
     @Override
     public Client update(Client client) {
         Client clientToSave = clientOutputPort.findById(client.getId());
+        log.info("clientToSave: {}", clientToSave);
         return clientOutputPort.save(client);
     }
 }

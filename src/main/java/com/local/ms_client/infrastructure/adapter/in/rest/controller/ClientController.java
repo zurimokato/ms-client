@@ -8,12 +8,13 @@ import com.local.ms_client.infrastructure.adapter.in.rest.controller.request.Cli
 import com.local.ms_client.infrastructure.adapter.in.rest.controller.response.ClientResponse;
 import com.local.ms_client.infrastructure.adapter.in.rest.controller.response.GenericResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/clients")
@@ -23,49 +24,49 @@ public class ClientController implements ClientApiPort {
     private final ClientRestMapper clientRestMapper;
 
     @Override
-    public ResponseEntity<GenericResponse> getClients(Pageable pageable) {
+    public GenericResponse getClients(Pageable pageable) {
         Page<ClientResponse> page = findClientUseCase.findAllClients(pageable)
                 .map(clientRestMapper::toResponse);
         GenericResponse genericResponse = GenericResponse.success();
         genericResponse.setData(page.getContent());
         genericResponse.setPageResponse(clientRestMapper.toPageResponse(page));
-        return ResponseEntity.ok(genericResponse);
+        return genericResponse;
     }
 
     @Override
-    public ResponseEntity<GenericResponse> getClientsByStoreId(Long storeId, Pageable pageable) {
+    public GenericResponse getClientsByStoreId(Long storeId, Pageable pageable) {
         Page<ClientResponse> page = findClientUseCase.findAllByStore(storeId, pageable)
                 .map(clientRestMapper::toResponse);
         GenericResponse genericResponse = GenericResponse.success();
         genericResponse.setData(page.getContent());
         genericResponse.setPageResponse(clientRestMapper.toPageResponse(page));
-        return ResponseEntity.ok(genericResponse);
+        return genericResponse;
     }
 
     @Override
-    public ResponseEntity<GenericResponse> getClientsById(Long id, Pageable pageable) {
+    public GenericResponse getClientsById(Long id, Pageable pageable) {
         ClientResponse clientResponse = clientRestMapper.toResponse(
                 findClientUseCase.findClientById(id));
         GenericResponse genericResponse = GenericResponse.success();
         genericResponse.setData(clientResponse);
-        return ResponseEntity.ok(genericResponse);
+        return genericResponse;
     }
 
     @Override
-    public ResponseEntity<GenericResponse> saveClient(ClientRequest clientRequest) {
+    public GenericResponse saveClient(ClientRequest clientRequest) {
         ClientResponse clientSaved=clientRestMapper.toResponse(
                 saveClientUseCase.save(clientRestMapper.toModel(clientRequest))
         );
-        GenericResponse genericResponse = GenericResponse.success();
-        return ResponseEntity.ok(genericResponse);
+        log.info("cliente saved {}" ,clientSaved);
+        return GenericResponse.success();
     }
 
     @Override
-    public ResponseEntity<GenericResponse> updateClient(ClientRequest clientRequest) {
-        ClientResponse clientSaved=clientRestMapper.toResponse(
+    public GenericResponse updateClient(ClientRequest clientRequest) {
+        ClientResponse updated=clientRestMapper.toResponse(
                 saveClientUseCase.update(clientRestMapper.toModel(clientRequest))
         );
-        GenericResponse genericResponse = GenericResponse.success();
-        return ResponseEntity.ok(genericResponse);
+        log.info("cliente updated {}" ,updated);
+        return GenericResponse.success();
     }
 }

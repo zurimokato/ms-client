@@ -9,6 +9,7 @@ import com.local.ms_client.infrastructure.adapter.in.rest.controller.response.Cl
 import com.local.ms_client.infrastructure.adapter.in.rest.controller.response.GenericResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ public class ClientController implements ClientApiPort {
     private final ClientRestMapper clientRestMapper;
 
     @Override
+    @Cacheable(value = "clients")
     public GenericResponse getClients(Pageable pageable) {
         Page<ClientResponse> page = findClientUseCase.findAllClients(pageable)
                 .map(clientRestMapper::toResponse);
@@ -34,6 +36,7 @@ public class ClientController implements ClientApiPort {
     }
 
     @Override
+    @Cacheable(value = "clients", key = "#storeId")
     public GenericResponse getClientsByStoreId(Long storeId, Pageable pageable) {
         Page<ClientResponse> page = findClientUseCase.findAllByStore(storeId, pageable)
                 .map(clientRestMapper::toResponse);
@@ -44,6 +47,7 @@ public class ClientController implements ClientApiPort {
     }
 
     @Override
+    @Cacheable(value = "clients", key = "#id")
     public GenericResponse getClientsById(Long id, Pageable pageable) {
         ClientResponse clientResponse = clientRestMapper.toResponse(
                 findClientUseCase.findClientById(id));
